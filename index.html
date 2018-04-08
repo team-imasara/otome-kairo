@@ -10,12 +10,18 @@
     @font-face {
       font-family: 'D7CBI';
       src: url('./fonts/DSEG7Classic-BoldItalic.woff') format('woff')
-      , url('./fonts/DSEG7Classic-BoldItalic.woff2') format('woff2');
+      , url('./fonts/DSEG7Classic-BoldItalic.woff2') format('woff2')
+      , url('./fonts/DSEG7Classic-BoldItalic.ttf') format('truetype');
+      font-weight: bold;
+      font-style: italic;
     }
     @font-face {
       font-family: 'D7CI';
-      src: url('./fonts/DSEG7Classic-Italic.woff') format('woff'),
-      url('./fonts/DSEG7Classic-Italic.woff2') format('woff2');
+      src: url('./fonts/DSEG7Classic-Italic.woff') format('woff')
+      , url('./fonts/DSEG7Classic-Italic.woff2') format('woff2')
+      , url('./fonts/DSEG7Classic-Italic.ttf') format('truetype');
+      font-weight: normal;
+      font-style: italic;
     }
 
     #cnt {
@@ -119,13 +125,14 @@
       r.buttonMode = true;
       r.alpha = 0;
       r.hitArea = new PIXI.Rectangle(30,0,158,120);
-      r.on('click', function (event) {
+      r._myfn = function (event) {
         if (r.alpha > 0.5) {
           charm.fadeOut(r, 30);
         } else {
           charm.fadeIn(r, 30);
         }
-      });
+      };
+      r.on('click', r._myfn).on('tap', r._myfn)
 
       app.stage.addChild(r);
 
@@ -137,13 +144,14 @@
       l.alpha = 0;
       l.interactive = true;
       l.buttonMode = true;
-      l.on('click', function (event) {
+      l._myfn = function (event) {
         if (l.alpha > 0.5) {
           charm.fadeOut(l, 30);
         } else {
           charm.fadeIn(l, 30);
         }
-      });
+      };
+      l.on('click',l._myfn).on('tap', l._myfn);
       app.stage.addChild(l);
 
 
@@ -166,15 +174,14 @@
       indctr.interactive = true;
       indctr.buttonMode = true;
       indctr.hitArea = new PIXI.Rectangle(10,50,60,120);
-      indctr.on('click', function (event) {
+      indctr._myfn = function (event) {
         if (indctr.playing) {
           indctr.gotoAndStop(0);
         } else {
           indctr.play();
         }
-      });
-
-      var ctr_playing = false;
+      };
+      indctr.on('click', indctr._myfn).on('tap', indctr._myfn)
 
       cBg = new PIXI.Sprite(PIXI.loader.resources["c0"].texture);
       cBg.x = 140;
@@ -186,14 +193,15 @@
       cBg.buttonMode = true;
       cBg.alpha = 0;
       cBg.hitArea = new PIXI.Rectangle(50,50,100,100);
-      cBg.on('click', function (event) {
+      cBg._myfn = function (event) {
         if (c2.plaing || c3.playing) return;
         if (c2.alpha > 0.5) {
           c2.play();
         } else {
           c3.play();
         }
-      });
+      };
+      cBg.on('click', cBg._myfn).on('tap', cBg._myfn)
 
 
       var c2_ar = [];
