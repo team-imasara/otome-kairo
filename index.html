@@ -1,1 +1,343 @@
-<h1>otome-kairo</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=4.0, minimum-scale=1.0, user-scalable=yes"/>
+
+  <title>otome kairo</title>
+
+  <style>
+    @font-face {
+      font-family: 'D7CBI';
+      src: url('./fonts/DSEG7Classic-BoldItalic.woff') format('woff');
+    }
+    @font-face {
+      font-family: 'D7CI';
+      src: url('./fonts/DSEG7Classic-Italic.woff') format('woff');
+    }
+
+    #cnt {
+      background: black;
+    }
+    .D7CBI {
+      font-family: "D7CBI";
+    }
+    .D7CI {
+      font-family: "D7CI";
+    }
+    body {
+      margin: 0px; padding: 0px;
+    }
+    * {
+      margin: 0px; padding: 0px;
+    }
+
+
+  </style>
+  <script src="pixi.min.js"></script>
+  <script src="charm.js"></script>
+  <script src="jquery-3.2.1.js"></script>
+  <script>
+
+    var font = "D7CI";
+
+    // var type;
+
+    var width = 480;
+    var height = 320;
+
+    var charm;
+
+    var cnt;
+    var app;
+    var bg,r,l,g,cBg,c2, c3, indctr;
+
+    var hours,mins;
+
+    function myinit() {
+
+      cnt = $("#cnt")[0];
+
+      charm = new Charm(PIXI);
+
+      app = new PIXI.Application({
+        width: width, height: height
+        // , forceCanvas: true
+      });
+      //Add the canvas that Pixi automatically created for you to the HTML document
+      cnt.appendChild(app.view);
+      app.renderer.backgroundColor = 0x006600;
+
+      PIXI.loader
+          .add("bg", "images/bg2.png") // center
+          .add("r", "images/r1.png") // center
+          .add("l", "images/leftlamp.png") // center
+      ;
+      for (var i = 0; i <= 7; i++) {
+        PIXI.loader.add("g" + i, "images/g" + i + ".png")
+      }
+      for (var i = 0; i <= 3; i++) {
+        PIXI.loader.add("c" + i, "images/c" + i + ".png")
+      }
+      for (var i = 0; i <= 8; i++) {
+        PIXI.loader.add("i" + i, "images/i" + i + ".png")
+      }
+
+      PIXI.loader.load(setup);
+
+    }
+
+    function setup() {
+
+      bg = new PIXI.Sprite(PIXI.loader.resources["bg"].texture);
+      bg.x = (width - bg.width) / 2;
+      bg.y = (height - bg.height) / 2;
+      app.stage.addChild(bg);
+
+      var wheel_ar = [];
+      for (var i = 0; i <= 7; i++) {
+        wheel_ar.push({texture: PIXI.loader.resources["g" + i].texture, time: 1 / 1.0});
+      }
+      g = new PIXI.extras.AnimatedSprite(wheel_ar);
+      g.x = 98.5;
+      g.y = 11.5;
+      g.width = 289;
+      g.height = 289;
+      g.animationSpeed = 1 / 60.0;
+      // g.gotoAndPlay(0);
+      app.stage.addChild(g);
+
+
+      r = new PIXI.Sprite(PIXI.loader.resources["r"].texture);
+      r.x = 287;
+      r.y = -63;
+      r.width = 165;
+      r.height = 158;
+      r.interactive = true;
+      r.buttonMode = true;
+      r.alpha = 0;
+      r.hitArea = new PIXI.Rectangle(30,0,158,120);
+      r.on('click', function (event) {
+        if (r.alpha > 0.5) {
+          charm.fadeOut(r, 30);
+        } else {
+          charm.fadeIn(r, 30);
+        }
+      });
+
+      app.stage.addChild(r);
+
+      l = new PIXI.Sprite(PIXI.loader.resources["l"].texture);
+      l.x = 26;
+      l.y = 148;
+      l.width = 88;
+      l.height = 36;
+      l.alpha = 0;
+      l.interactive = true;
+      l.buttonMode = true;
+      l.on('click', function (event) {
+        if (l.alpha > 0.5) {
+          charm.fadeOut(l, 30);
+        } else {
+          charm.fadeIn(l, 30);
+        }
+      });
+      app.stage.addChild(l);
+
+
+      var indctr_ar = [];
+      for (var i = 0; i <= 8; i++) {
+        indctr_ar.push({texture: PIXI.loader.resources["i" + i].texture, time: 1 / 1.0});
+      }
+      for (var i = 8; i >= 0; i--) {
+        indctr_ar.push({texture: PIXI.loader.resources["i" + i].texture, time: 1 / 1.0});
+      }
+      indctr = new PIXI.extras.AnimatedSprite(indctr_ar);
+      indctr.x = 62;
+      indctr.y = 165;
+      indctr.width = 176;
+      indctr.height = 164;
+      indctr.animationSpeed = 0.5 / 60.0;
+      // indctr.gotoAndPlay(0);
+      app.stage.addChild(indctr);
+
+      indctr.interactive = true;
+      indctr.buttonMode = true;
+      indctr.hitArea = new PIXI.Rectangle(10,50,60,120);
+      indctr.on('click', function (event) {
+        if (indctr.playing) {
+          indctr.gotoAndStop(0);
+        } else {
+          indctr.play();
+        }
+      });
+
+      var ctr_playing = false;
+
+      cBg = new PIXI.Sprite(PIXI.loader.resources["c0"].texture);
+      cBg.x = 140;
+      cBg.y = 53;
+      cBg.width = 202;
+      cBg.height = 202;
+      app.stage.addChild(cBg);
+      cBg.interactive = true;
+      cBg.buttonMode = true;
+      cBg.alpha = 0;
+      cBg.hitArea = new PIXI.Rectangle(50,50,100,100);
+      cBg.on('click', function (event) {
+        if (c2.plaing || c3.playing) return;
+        if (c2.alpha > 0.5) {
+          c2.play();
+        } else {
+          c3.play();
+        }
+      });
+
+
+      var c2_ar = [];
+      for (var i = 0; i <= 3; i++) {
+        c2_ar.push({texture: PIXI.loader.resources["c" + i].texture, time: 1 / 1.0});
+      }
+      c2 = new PIXI.extras.AnimatedSprite(c2_ar);
+      c2.x = 140;
+      c2.y = 53;
+      c2.width = 202;
+      c2.height = 202;
+      c2.animationSpeed = 0.1 / 60.0;
+      c2.loop = false;
+      c2.onComplete = function() {
+        c3.alpha = 1.0;
+        c2.gotoAndStop(0);
+        c2.alpha = 0.0;
+      }
+      app.stage.addChild(c2);
+
+      var c3_ar = [];
+      for (var i = 3; i >= 0; i--) {
+        c3_ar.push({texture: PIXI.loader.resources["c" + i].texture, time: 1 / 1.0});
+      }
+      c3 = new PIXI.extras.AnimatedSprite(c3_ar);
+      c3.x = 140;
+      c3.y = 53;
+      c3.width = 202;
+      c3.height = 202;
+      c3.animationSpeed = 0.25 / 60.0;
+      c3.loop = false;
+      c3.alpha = 0;
+      c3.onComplete = function() {
+        c2.alpha = 1.0;
+        c3.gotoAndStop(0);
+        c3.alpha = 0.0;
+      }
+      app.stage.addChild(c3);
+
+      r.alpha = 0;
+      l.alpha = 0;
+      // c2.alpha = 0;
+
+      var style = new PIXI.TextStyle({
+        fontFamily : font,
+        fontSize:23,
+        fill:"white"
+        ,
+        dropShadow:true, dropShadowColor: "#FF0000",
+        dropShadowBlur:8, dropShadowAngle:0, dropShadowDistance:0
+      });
+      var style2 = new PIXI.TextStyle({
+        fontFamily : font,
+        fontSize:18,
+        fill:"white"
+        ,
+        dropShadow:true, dropShadowColor: "#FF0000",
+        dropShadowBlur:8, dropShadowAngle:0, dropShadowDistance:0
+      });
+      var style_b = new PIXI.TextStyle({
+        fontFamily : font,
+        fontSize:23,
+        fill:"#444"
+      });
+      var style2_b = new PIXI.TextStyle({
+        fontFamily : font,
+        fontSize:18,
+        fill:"#444"
+      });
+
+      hours_b = new PIXI.Text("88", style_b);
+      mins_b = new PIXI.Text(":88", style2_b);
+      hours_b.position.set(10, 118);
+      mins_b.position.set(49, 123);
+      app.stage.addChild(hours_b);
+      app.stage.addChild(mins_b);
+
+      hours = new PIXI.Text("", style);
+      mins = new PIXI.Text("", style2);
+      hours.position.set(10, 118);
+      mins.position.set(49, 123);
+      app.stage.addChild(hours);
+      app.stage.addChild(mins);
+
+      // updateTimer();
+
+      setTimeout(function() {
+        g.play();
+      },1000);
+
+      showTime();
+
+      gameLoop(0.01);
+    }
+
+    function showTime() {
+      updateTimer();
+      setTimeout(function() { g.play(); r.emit("click"); }, 1000);
+      setTimeout(function() { l.emit("click"); indctr.emit("click"); }, 1630);
+      setTimeout(function() { cBg.emit("click"); }, 2300);
+    }
+
+    function gameLoop(delta){
+      requestAnimationFrame(gameLoop);
+      charm.update();
+    }
+
+    function hello() {
+      t = "WebGL";
+      if (!PIXI.utils.isWebGLSupported()) {
+        t = "canvas";
+      }
+      console.log(t + " " + new Date());
+      PIXI.utils.sayHello(t);
+    }
+
+    $(function() {
+      myinit();
+    });
+
+
+
+    function updateTimer(){
+      function fmt(tm){
+        return tm < 10 ? "0" + tm : "" + tm;
+      }
+      var date = new Date();
+      var tm_hour, tm_min, tm_sec, tm_msec;
+      var colon;
+      tm_hour = date.getHours();
+      tm_min = date.getMinutes();
+      tm_msec = date.getMilliseconds();
+      tm_hour = fmt(tm_hour);
+      tm_min  = fmt(tm_min);
+      colon = tm_msec > 499 ? " " : ":" ;
+      hours.text = tm_hour;
+      mins.text = colon + tm_min;
+      setTimeout("updateTimer()", 500 - date.getMilliseconds() % 500);
+    }
+
+  </script>
+</head>
+<body><div id="cnt" style="text-align: center"></div>
+<span class="D7CBI" style="display:none;">3</span>
+<span class="D7CI" style="display:none;">4</span>
+<!--<div class="D7CI" style="font-size: 27px;color:white;background: black;display:none;">-->
+<!--</div>-->
+</body>
+</html>
