@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, minimum-scale=0.5, user-scalable=yes"/>
+  <meta name="format-detection" content="telephone=no">
 
   <title>otome kairo</title>
 
@@ -29,7 +30,7 @@
       margin: 0px; padding: 0px;
     }
     body {
-      width:100%; background: black;
+      width:100%; background: black;color:white;
       margin: 0px; padding: 0px;
     }
 
@@ -56,6 +57,8 @@
     var hours,mins;
 
     function myinit() {
+
+      return;
 
       cnt = $("#cnt")[0];
 
@@ -340,8 +343,8 @@
 <body>
 <div id="cnt" style="text-align: center;">
 </div>
-<span class="D7CBI" style="opacity:0;position:absolute;">1234567890</span>
-<span class="D7CI" style="opacity:0;position:absolute;">1234567890</span>
+<!--<span class="D7CBI" style="position:absolute;">1234567890</span>-->
+<span class="D7CI" style="position:absolute;color:white;">1234567890</span>
 <!--<div class="D7CI" style="font-size: 27px;color:white;background: black;display:none;">-->
 <!--</div>-->
 </body>
