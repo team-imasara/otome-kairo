@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=4.0, minimum-scale=1.0, user-scalable=yes"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, minimum-scale=0.5, user-scalable=yes"/>
 
   <title>otome kairo</title>
 
@@ -10,18 +10,10 @@
     @font-face {
       font-family: 'D7CBI';
       src: url('./fonts/DSEG7Classic-BoldItalic.woff') format('woff')
-      , url('./fonts/DSEG7Classic-BoldItalic.woff2') format('woff2')
-      , url('./fonts/DSEG7Classic-BoldItalic.ttf') format('truetype');
-      font-weight: bold;
-      font-style: italic;
     }
     @font-face {
       font-family: 'D7CI';
       src: url('./fonts/DSEG7Classic-Italic.woff') format('woff')
-      , url('./fonts/DSEG7Classic-Italic.woff2') format('woff2')
-      , url('./fonts/DSEG7Classic-Italic.ttf') format('truetype');
-      font-weight: normal;
-      font-style: italic;
     }
 
     #cnt {
@@ -33,10 +25,11 @@
     .D7CI {
       font-family: "D7CI";
     }
-    body {
+    div {
       margin: 0px; padding: 0px;
     }
-    * {
+    body {
+      width:100%; background: black;
       margin: 0px; padding: 0px;
     }
 
@@ -344,9 +337,11 @@
 
   </script>
 </head>
-<body><div id="cnt" style="text-align: center"></div>
-<span class="D7CBI" style="display:none;">3</span>
-<span class="D7CI" style="display:none;">4</span>
+<body>
+<div id="cnt" style="text-align: center;">
+</div>
+<span class="D7CBI" style="opacity:0;position:absolute;">1234567890</span>
+<span class="D7CI" style="opacity:0;position:absolute;">1234567890</span>
 <!--<div class="D7CI" style="font-size: 27px;color:white;background: black;display:none;">-->
 <!--</div>-->
 </body>
