@@ -86,14 +86,14 @@
 
     var hours,mins;
 
-    var retry = 10;
+    var retry = 30;
 
     function myinit() {
 
       if (!fontReady) {
         if (--retry<=0) {
-          alert("Font Not Loaded")
-          return;
+          alert("Font Not Loaded.")
+          // return;
         }
         setTimeout("myinit()", 200);
         return;
@@ -377,7 +377,7 @@
 <div id="cnt" style="text-align: center;">
 </div>
 <!--<span class="D7CBI" style="position:absolute;">1234567890</span>-->
-<span class="D7CI" style="position:absolute;color:white;">1234567890</span>
+<!--<span class="D7CI" style="position:absolute;color:white;">1234567890</span>-->
 <!--<div class="D7CI" style="font-size: 27px;color:white;background: black;display:none;">-->
 <!--</div>-->
 </body>
