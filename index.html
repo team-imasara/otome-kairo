@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, minimum-scale=0.5, user-scalable=yes"/>
   <meta name="format-detection" content="telephone=no">
+  <script src="webfontloader.js"></script>
 
   <title>otome kairo</title>
 
@@ -36,6 +37,35 @@
 
 
   </style>
+
+  <script>
+
+    var fontReady = false;
+
+    WebFont.load({
+      custom: {
+        families: ['D7CI','D7CBI']
+      }
+      , testStrings: {
+        'D7CI': '149', 'D7CBI':'258'
+      }
+      , fontloading : function(familyName) {
+        console.log(familyName + " loaded");
+        var el = document.createElement("p");
+        el.style.fontFamily = familyName;
+        el.style.fontSize = "0px";
+        el.style.visibility = "hidden";
+        el.innerHTML =".";
+        document.body.appendChild(el);
+      }
+      , active: function() {
+        console.log("fontReady");
+        fontReady = true;
+      }
+    });
+
+  </script>
+
   <script src="pixi.min.js"></script>
   <script src="charm.js"></script>
   <script src="jquery-3.2.1.js"></script>
@@ -56,9 +86,19 @@
 
     var hours,mins;
 
+    var retry = 10;
+
     function myinit() {
 
-      return;
+      if (!fontReady) {
+        if (--retry<=0) {
+          alert("Font Not Loaded")
+          return;
+        }
+        setTimeout("myinit()", 200);
+        return;
+      }
+
 
       cnt = $("#cnt")[0];
 
@@ -305,14 +345,7 @@
       charm.update();
     }
 
-    function hello() {
-      t = "WebGL";
-      if (!PIXI.utils.isWebGLSupported()) {
-        t = "canvas";
-      }
-      console.log(t + " " + new Date());
-      PIXI.utils.sayHello(t);
-    }
+
 
     $(function() {
       myinit();
