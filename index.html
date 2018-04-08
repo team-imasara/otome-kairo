@@ -9,17 +9,17 @@
   <title>otome kairo</title>
 
   <style>
-    @font-face {
-      font-family: 'D7CBI';
-      src: url('./fonts/DSEG7Classic-BoldItalic.woff') format('woff')
-    }
+    /*@font-face {*/
+      /*font-family: 'D7CBI';*/
+      /*src: url('./fonts/DSEG7Classic-BoldItalic.woff') format('woff')*/
+    /*}*/
     @font-face {
       font-family: 'D7CI';
       src: url('./fonts/DSEG7Classic-Italic.woff') format('woff')
     }
 
     #cnt {
-      background: black;
+      /*background: green;*/
     }
     .D7CBI {
       font-family: "D7CBI";
@@ -33,6 +33,7 @@
     body {
       width:100%; background: black;color:white;
       margin: 0px; padding: 0px;
+      font-family: system-ui;
     }
 
 
@@ -42,27 +43,29 @@
 
     var fontReady = false;
 
-    WebFont.load({
-      custom: {
-        families: ['D7CI','D7CBI']
-      }
-      , testStrings: {
-        'D7CI': '149', 'D7CBI':'258'
-      }
-      , fontloading : function(familyName) {
-        console.log(familyName + " loaded");
-        var el = document.createElement("p");
-        el.style.fontFamily = familyName;
-        el.style.fontSize = "0px";
-        el.style.visibility = "hidden";
-        el.innerHTML =".";
-        document.body.appendChild(el);
-      }
-      , active: function() {
-        console.log("fontReady");
-        fontReady = true;
-      }
-    });
+    function loadFont() {
+      WebFont.load({
+        custom: {
+          families: ['D7CI']
+        }
+        , testStrings: {
+          'D7CI': '149'
+        }
+        , fontloading: function (familyName) {
+          console.log(familyName + " loaded");
+          var el = document.createElement("p");
+          el.style.fontFamily = familyName;
+          el.style.fontSize = "0px";
+          el.style.visibility = "hidden";
+          el.innerHTML = ".";
+          document.body.appendChild(el);
+        }
+        , active: function () {
+          console.log("fontReady");
+          fontReady = true;
+        }
+      });
+    }
 
   </script>
 
@@ -75,8 +78,11 @@
 
     // var type;
 
-    var width = 480;
-    var height = 320;
+    var h = 80;
+    var w = 80;
+
+    var width = 480 + w * 2;
+    var height = 320 + h * 2;
 
     var charm;
 
@@ -91,14 +97,15 @@
     function myinit() {
 
       if (!fontReady) {
-        if (--retry<=0) {
-          alert("Font Not Loaded.")
+        if (--retry <= 0) {
+          // alert("Font Not Loaded.")
           // return;
+          $("#debug").text("WARNING: Font Not Loaded")
+        } else {
+          setTimeout("myinit()", 250);
+          return;
         }
-        setTimeout("myinit()", 200);
-        return;
       }
-
 
       cnt = $("#cnt")[0];
 
@@ -135,7 +142,7 @@
 
       bg = new PIXI.Sprite(PIXI.loader.resources["bg"].texture);
       bg.x = (width - bg.width) / 2;
-      bg.y = (height - bg.height) / 2;
+      bg.y = (height - bg.height) / 2 ;
       app.stage.addChild(bg);
 
       var wheel_ar = [];
@@ -143,8 +150,8 @@
         wheel_ar.push({texture: PIXI.loader.resources["g" + i].texture, time: 1 / 1.0});
       }
       g = new PIXI.extras.AnimatedSprite(wheel_ar);
-      g.x = 98.5;
-      g.y = 11.5;
+      g.x = 98.5 + w;
+      g.y = 11.5 + h;
       g.width = 289;
       g.height = 289;
       g.animationSpeed = 1 / 60.0;
@@ -153,14 +160,14 @@
 
 
       r = new PIXI.Sprite(PIXI.loader.resources["r"].texture);
-      r.x = 287;
-      r.y = -63;
+      r.x = 287 + w;
+      r.y = -63 + h;
       r.width = 165;
       r.height = 158;
       r.interactive = true;
       r.buttonMode = true;
       r.alpha = 0;
-      r.hitArea = new PIXI.Rectangle(30,0,158,120);
+      r.hitArea = new PIXI.Rectangle(30,0,158,140);
       r._myfn = function (event) {
         if (r.alpha > 0.5) {
           charm.fadeOut(r, 30);
@@ -173,8 +180,8 @@
       app.stage.addChild(r);
 
       l = new PIXI.Sprite(PIXI.loader.resources["l"].texture);
-      l.x = 26;
-      l.y = 148;
+      l.x = 26 + w;
+      l.y = 148 + h;
       l.width = 88;
       l.height = 36;
       l.alpha = 0;
@@ -199,8 +206,8 @@
         indctr_ar.push({texture: PIXI.loader.resources["i" + i].texture, time: 1 / 1.0});
       }
       indctr = new PIXI.extras.AnimatedSprite(indctr_ar);
-      indctr.x = 62;
-      indctr.y = 165;
+      indctr.x = 62 + w;
+      indctr.y = 165 + h;
       indctr.width = 176;
       indctr.height = 164;
       indctr.animationSpeed = 0.5 / 60.0;
@@ -220,8 +227,8 @@
       indctr.on('click', indctr._myfn).on('tap', indctr._myfn)
 
       cBg = new PIXI.Sprite(PIXI.loader.resources["c0"].texture);
-      cBg.x = 140;
-      cBg.y = 53;
+      cBg.x = 140 + w;
+      cBg.y = 53 + h;
       cBg.width = 202;
       cBg.height = 202;
       app.stage.addChild(cBg);
@@ -245,8 +252,8 @@
         c2_ar.push({texture: PIXI.loader.resources["c" + i].texture, time: 1 / 1.0});
       }
       c2 = new PIXI.extras.AnimatedSprite(c2_ar);
-      c2.x = 140;
-      c2.y = 53;
+      c2.x = 140 + w;
+      c2.y = 53 + h;
       c2.width = 202;
       c2.height = 202;
       c2.animationSpeed = 0.1 / 60.0;
@@ -263,8 +270,8 @@
         c3_ar.push({texture: PIXI.loader.resources["c" + i].texture, time: 1 / 1.0});
       }
       c3 = new PIXI.extras.AnimatedSprite(c3_ar);
-      c3.x = 140;
-      c3.y = 53;
+      c3.x = 140 + w;
+      c3.y = 53 + h;
       c3.width = 202;
       c3.height = 202;
       c3.animationSpeed = 0.25 / 60.0;
@@ -310,15 +317,15 @@
 
       hours_b = new PIXI.Text("88", style_b);
       mins_b = new PIXI.Text(":88", style2_b);
-      hours_b.position.set(10, 118);
-      mins_b.position.set(49, 123);
+      hours_b.position.set(10 + w, 118 + h);
+      mins_b.position.set(49 + w, 123 + h);
       app.stage.addChild(hours_b);
       app.stage.addChild(mins_b);
 
       hours = new PIXI.Text("", style);
       mins = new PIXI.Text("", style2);
-      hours.position.set(10, 118);
-      mins.position.set(49, 123);
+      hours.position.set(10 + w, 118 + h);
+      mins.position.set(49 + w, 123 + h);
       app.stage.addChild(hours);
       app.stage.addChild(mins);
 
@@ -348,6 +355,7 @@
 
 
     $(function() {
+      loadFont();
       myinit();
     });
 
@@ -377,7 +385,7 @@
 <div id="cnt" style="text-align: center;">
 </div>
 <!--<span class="D7CBI" style="position:absolute;">1234567890</span>-->
-<!--<span class="D7CI" style="position:absolute;color:white;">1234567890</span>-->
+<span id="debug" class="D7CI" style="position:absolute;color:white;">.</span>
 <!--<div class="D7CI" style="font-size: 27px;color:white;background: black;display:none;">-->
 <!--</div>-->
 </body>
